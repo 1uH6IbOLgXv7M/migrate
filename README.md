@@ -64,6 +64,9 @@ migrate -path ./migrations -database "postgres://localhost:5432/mydb?sslmode=dis
 
 # Check current migration version
 migrate -path ./migrations -database "postgres://localhost:5432/mydb?sslmode=disable" version
+
+# Force a specific version (useful when recovering from a failed migration)
+migrate -path ./migrations -database "postgres://localhost:5432/mydb?sslmode=disable" force <version>
 ```
 
 ### Library Usage
@@ -93,57 +96,9 @@ func main() {
         log.Fatal(err)
     }
 }
-```
-
-## Migration Files
-
-Migration files follow the naming convention:
 
 ```
-{version}_{title}.up.{extension}
-{version}_{title}.down.{extension}
-```
 
-Example:
-```
-migrations/
-  001_create_users.up.sql
-  001_create_users.down.sql
-  002_add_email_index.up.sql
-  002_add_email_index.down.sql
-```
+## Notes
 
-## Development
-
-```bash
-# Clone the repository
-git clone https://github.com/your-org/migrate.git
-cd migrate
-
-# Run tests
-go test ./...
-
-# Run linter
-golangci-lint run
-
-# Build CLI
-go build -o migrate ./cmd/migrate
-```
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feat/my-feature`)
-3. Commit your changes (`git commit -m 'feat: add my feature'`)
-4. Push to the branch (`git push origin feat/my-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-This project is a fork of [golang-migrate/migrate](https://github.com/golang-migrate/migrate). Thanks to all original contributors.
+> **Personal note:** I primarily use this with PostgreSQL and the `file` source driver. The `force` command has been a lifesaver when a migration fails partway through and leaves the dirty flag set — worth knowing about before you need it.
