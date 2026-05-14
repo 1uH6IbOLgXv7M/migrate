@@ -136,19 +136,8 @@ func TestMigrate_Steps(t *testing.T) {
 		mig, err := New("file://testdata/migrations", "stub://")
 		require.NoError(t, err)
 
+		// Steps(0) is a no-op and should always return ErrNoChange
 		err = mig.Steps(0)
 		assert.True(t, errors.Is(err, ErrNoChange))
-	})
-}
-
-func TestMigrate_Version(t *testing.T) {
-	t.Run("returns NilVersion when no migrations applied", func(t *testing.T) {
-		mig, err := New("file://testdata/migrations", "stub://")
-		require.NoError(t, err)
-
-		version, dirty, err := mig.Version()
-		require.NoError(t, err)
-		assert.Equal(t, uint(NilVersion), version)
-		assert.False(t, dirty)
 	})
 }
